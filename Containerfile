@@ -1,5 +1,4 @@
 FROM debian:trixie-slim AS builder
-MAINTAINER Thom Wiggers
 
 ENV DEBIAN_NONINTERACTIVE=1
 
