@@ -18,22 +18,18 @@ COPY resources/texlive.profile /texlive.profile
 RUN if [ "${TLYEAR}" -eq "2025" ] ; then \
     curl -L -o install-tl-unx.tar.gz https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/install-tl-unx.tar.gz; \
     export REPOSITORY=""; \
-    export OPTS="--no-doc-install --no-source-install"; \
   elif [ ${TLYEAR} -le 2021 ]; then \
     curl -L -o install-tl-unx.tar.gz https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/tlnet-final/install-tl-unx.tar.gz; \
-    export OPTS=""; \
     export REPOSITORY="--repository=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/tlnet-final/tlpkg"; \
   else \
     curl -L -o install-tl-unx.tar.gz https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/tlnet-final/install-tl-unx.tar.gz; \
     export REPOSITORY="--repository=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/tlnet-final/tlpkg"; \
-    export OPTS="--no-doc-install --no-source-install"; \
   fi \
  && tar xzf install-tl-unx.tar.gz \
  && cd install-tl-2* \
  && echo "selected_scheme scheme-${TLSCHEME}" >> /texlive.profile \
  && ./install-tl \
     $REPOSITORY \
-    $OPTS \
     --profile=/texlive.profile
 
 FROM debian:trixie-slim
