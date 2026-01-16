@@ -10,16 +10,23 @@ RUN apt update -qq \
         build-essential \
         curl \
         perl \
+        gnupg \
         libwww-perl
 
-RUN curl -L -o install-tl-unx.tar.gz https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/install-tl-unx.tar.gz
-RUN tar xzf install-tl-unx.tar.gz
-
-RUN cd install-tl-2* \
+RUN if [ "${TLYEAR}" -eq "2025" ] ; then \
+    curl -L -o install-tl-unx.tar.gz https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/install-tl-unx.tar.gz; \
+    export REPOSITORY=""; \
+  else \
+    curl -L -o install-tl-unx.tar.gz https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/tlnet-final/install-tl-unx.tar.gz; \
+    export REPOSITORY="--repository=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${TLYEAR}/tlnet-final/tlpkg"; \
+  fi \
+ && tar xzf install-tl-unx.tar.gz \
+ && cd install-tl-2* \
  && ./install-tl --paper=a4 \
     --no-doc-install \
     --no-src-install \
     --no-interaction \
+    $REPOSITORY \
     --scheme=${TLSCHEME}
 
 FROM debian:trixie-slim
