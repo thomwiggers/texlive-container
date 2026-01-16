@@ -1,0 +1,6 @@
+binary_aarch64-linux 1
+binary_x86_64-linux 1
+tlpdbopt_autobackup 0
+tlpdbopt_install_docfiles 0
+tlpdbopt_install_srcfiles 0
+tlpdbopt_generate_updmap 1
