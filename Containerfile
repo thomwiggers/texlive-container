@@ -6,7 +6,6 @@ ENV DEBIAN_NONINTERACTIVE=1
 ARG TLYEAR=2025
 ARG TLSCHEME=small
 
-
 RUN apt update -qq \
  && apt install -qq -y \
         build-essential \
@@ -30,9 +29,6 @@ ARG TLYEAR=2025
 ENV DEBIAN_NONINTERACTIVE=1
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-RUN mkdir /work
-WORKDIR /work
-
 RUN apt update -qq \
  && apt install -qq -y \
       perl \
@@ -40,8 +36,11 @@ RUN apt update -qq \
       gnupg \
  && rm -rf /var/lib/apt /var/cache/apt
 
+RUN mkdir /work
+WORKDIR /work
+
 COPY --from=builder /usr/local/texlive /usr/local/texlive
-RUN bash -c "/usr/local/texlive/*/bin/*/tlmgr install biber"
+RUN bash -c "/usr/local/texlive/*/bin/*/tlmgr install --persistent-downloads biber"
 
 COPY resources/entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
